@@ -1,0 +1,59 @@
+This folder should include 3 files: zwen6_src.lisp zwen6_test.lisp README
+
+zwen6_test.lisp is the test script for the zwen6_src.lisp. USE (load "zwen6_test.lisp") to run, and the test results of zwen6_src.lisp will all show up.
+
+zwen6_src.lisp is the answer for the problem set1.
+*It includes 6 functions, which includes 4 functions according to the requirement of the problem set1 and 2 helper functions.
+*It will be automatically loaded if the zwen6_test.lisp was called.
+*Otherwise use (load "zwen6_src.lisp") to load file.
+
+
+Required Functions details:
+
+1.unifier
+*This function takes two arguements in.
+*First arguement should be a list but with variable possibly and second arguement should be a list without variable.
+*If the type check wrong, return nil.
+*otherwise return a unified list.
+*This function used hash-table.
+
+2.apply-unifier
+*This function takes two arguements in.
+*First should be a unified list, and second should be a literal.
+*If the type check wrong, return nil.
+*Otherwise return a new literal with varaibles are replaced by constant corespondingly.
+*This function used recursion.
+
+3.extract-constant
+*This function takes one arguement in.
+*This should be a list of literal or states.
+*If type check wrong, return nil.
+*Otherwise, return a list of non-redundant constant.
+*This function used defined local function and mapcan.
+
+4.prune-unifiers
+*This function takes one arguement in.
+*This should be a list of unified lists.
+*If type check wrong, return nil.
+*Otherwise, return a new list of unified lists without the unified
+*list that binding two vraibles with the same constant
+*This function used defined local function and mapcan.
+
+Help Functions detils:
+
+1.var-chk
+*This function takes one arguement in.
+*This should be a atom.
+*Return true if it is a variable start with "?"
+*Otherwise nil.
+*This function used wirte-to-string and string-left-trim with "?"
+
+2.check-unifier
+*This function takes one arguement in.
+*This should be a unified list.
+*Return nil if check the wrong type of unified list
+*Otherwise ture.
+*This function use mapcar and memebr function.
+
+
+

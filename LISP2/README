@@ -1,0 +1,129 @@
+This folder should include 3 files: zwen6_src.lisp zwen6_test.lisp README
+
+zwen6_test.lisp is the test script for the zwen6_src.lisp. USE (load "zwen6_test.lisp") to run, and the test results of zwen6_src.lisp will all show up.
+
+zwen6_src.lisp is the answer for the problem set2.
+*It includes 15 functions, which includes 3 functions according to the requirement of the problem set1 and 12 helper functions.
+*It will be automatically loaded if the zwen6_test.lisp was called.
+*Otherwise use (load "zwen6_src.lisp") to load file.
+
+Required Functions details:
+
+1.distinct-bindings
+;;This function takes two list in as arguments.
+;;First arg is a list of variable, and second arg is a list of constants.
+;;If input types wrong, it will  return nil.
+;;Otherwise, it will return a list of unifiers,
+;;that binding variables and constants with all possible ways. 
+;;This function call several helper function.
+
+2.literal-unifiers
+;;This function takes three arguements.
+;;First arg is a literal.
+;;Second arg is a state.
+;;Third arg is a list of constants.
+;;If the type of any arguements is wrong, return nil.
+;;If first arg is postive literal with no variable,
+;;it will return true or nil, according to whether it is true in the state.
+;;If first arg is negtive literal with no variable,
+;;it will return true or nil, according to wheter it fails in the state.
+;;If first arg is positive with some variables,
+;;it will return unifiers according to the predicate.
+;;If first arg is negtive with some variables,
+;;it will return distinct bindings, but without what happend in the previous case.
+;;This function call several helper functions.
+
+3.operator-instances
+;;This function takes two arguements.
+;;First is an operation. second is a state.
+;;If type of any arg is wrong, return nil.
+;;Otherwise call precond-instantces and get the same return.
+
+Help Functions detils:
+
+1.var-chk
+*This function takes one arguement in.
+*This should be a atom.
+*Return true if it is a variable start with "?"
+*Otherwise nil.
+*This function used wirte-to-string and string-left-trim with "?"
+
+2.check-unifier
+*This function takes one arguement in.
+*This should be a unified list.
+*Return nil if check the wrong type of unified list
+*Otherwise ture.
+*This function use mapcar and memebr function.
+
+3.prune-unifiers
+*This function takes one arguement in.
+*This should be a list of unified lists.
+*If type check wrong, return nil.
+*Otherwise, return a new list of unified lists without the unified
+*list that binding two vraibles with the same constant
+*This function used defined local function and mapcan.
+
+4.adding-lst
+;;This function takes two list of unifiers in as arguments.
+;;It will return a new list of unifiers.
+;;In new list, for each elements in first arg,is
+;;append it with each elements in second arg one time.
+;;This function use local defined function and mapcar
+
+5.check-literal
+;;This function takes one list as the only arguement in.
+;;If this list is not a literal, it will return nil.
+;;If this list is a negative literal, it will return its positive version.
+;;If this list is a positive literal, it will return itself.
+;;This function use every, notevery and some function.
+
+6.check-state
+;;This function takes one list as the only arguement in.
+;;If this list is not part of state, it will return nil.
+;;Otherwise it returns true.
+;;This function calls var-chk function.
+
+7.unifier
+*This function takes two arguements in.
+*First arguement should be a list but with variable possibly and second arguement should be a list without variable.
+*If the type check wrong, return nil.
+*otherwise return a unified list.
+*This function used hash-table.
+
+8.apply-unifier
+*This function takes two arguements in.
+*First should be a unified list, and second should be a literal.
+*If the type check wrong, return nil.
+*Otherwise return a new literal with varaibles are replaced by constant corespondingly.
+*This function used recursion.
+
+9.append-check
+;;This function takes two list as arguements.
+;;It will append each item in first arg by each item in second arg respectively.
+;;This function use local defined function.
+
+10.recur-check
+;;This function takes one list as the second argument, and first arguement always empty.
+;;It recursively appends the first arg until second is reach to the end.
+;;This function call append-check function and use recursive.
+
+11.preconds-instances
+;;This function takes three list in as arguments.
+;;First one is a list of preconds.
+;;Second is state.
+;;Third is a list of constants.
+;;If type of any arg is wrong, it will return nil.
+;;Otherwise return all bindings that make them true in state.
+;;This function use local defined function and call prune-unifiers.
+
+12.final-check-op
+;;This is a helper function.
+;;It takes three list in as arguments.
+;;First one is a list of bindings (unifiers).
+;;Second is list of preconds.
+;;Third is a state.
+;;If the unifiers apply to preconds make it all true in state, then it will return this set of unifiers.
+;;Otherwise it will return nil.
+;;This function call apply-unifier function.
+
+

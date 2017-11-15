@@ -1,0 +1,17 @@
+
+(load "zwen6_src.lisp")
+
+(defun result-fomart (rslt crrc_rslt)
+  (format t "~:[FAIL~;pass~] ... ~a~%" rslt crrc_rslt))
+
+(defun cpar-rslt (func_rslt, crrc_rslt)
+  
+
+(defmacro check(&body func crrc_rslts)
+  `(progn
+     ,@(loop for cr in crrc_rslts collect `(result-fomart ,))
+  )
+  
+;;(defun testProg
+
+  ;;  )

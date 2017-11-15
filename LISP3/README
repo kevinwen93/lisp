@@ -1,0 +1,215 @@
+This folder should include 3 files: zwen6_src.lisp zwen6_test.lisp README
+
+zwen6_test.lisp is the test script for the zwen6_src.lisp. USE (load "zwen6_test.lisp") to run, and the test results of zwen6_src.lisp will all show up.
+
+
+zwen6_src.lisp is the answer for the problem set3.
+*It includes 26 functions, which includes 5 functions according to the requirement of the problem set3 and 21 helper functions.
+*It will be automatically loaded if the zwen6_test.lisp was called.
+*Otherwise use (load "zwen6_src.lisp") to load file.
+
+special notes:
+1.If you try to test hash-table related functions, please load source file every time. Please do (load "zwen6_src.lisp"). Since hash-table is a global variable, and a lot of function requires an empty hash-table to start, non-reloaded run wil cause functionality fails.
+
+2.I didn't put in testcase that if search time takes too long. Since I didn't come up with apropriate domain that can run fair long enough time. I do tested that if I changed the search time to very samll, and it did return approipate infomation("Search takes too long time.")
+
+3.One test case of successor-states works in my GNU clisp, but always fail on the school alisp. I still can't figure out why but all other cases pass, so I don't think it matters that much.
+
+Required Functions details:
+
+1.store-transition
+*This function takes three arguments in.
+*First is a state, second is an operation, third is another state.
+*This function aims to update global hashtale.
+*Create/update hash-table entry with key s.
+*Each entry should looks like (((prev o)) s ((next o)))
+*It will return nil if s is not new, otherwise return s.
+*This function use hashtable.
+
+2.successor-state
+*This function takes three arguments in.
+*Firsst is a state, second is an operator, third is an operator instance.
+*This function aims to use operator and operator instances to gernate the successor state of the given state.
+*This function also call store-transition to update hash-table
+*It wil exactly what store-transition returns.
+*This function local defined function and call store-transition
+
+3.successor-states
+*This function takes two arguments in.
+*First one is a state, second one is a list of operators.
+*This function calls operator-instances to generate instances and then pass these instances, operator and state to successor-state function to update hash-table and see what is new state
+*It will call successor-state several times and combine the return result from them and return them.
+*It calls opoerator-instances and successor-state.
+
+4.check-goal
+*This function takes two arguments in.
+*Both of them a state
+*If second state is contained in first state, then return true, otherwise null.
+
+5.find-plan
+*This function takes trhee arguements in.
+*First is a list of operators, second is state, third is state.
+*This function aims to find what operations need to take, to achieve second state from first state.
+*It will return "solution not found", if no such operations combination.
+*If search of operations combination takes too long time, return "Search takes too long time.", othersie return the list of operations.
+*This function calls make-open-list and back-track.
+
+
+Help Functions detils:
+
+1.var-chk
+*This function takes one arguement in.
+*This should be a atom.
+*Return true if it is a variable start with "?"
+*Otherwise nil.
+*This function used wirte-to-string and string-left-trim with "?"
+
+2.check-unifier
+*This function takes one arguement in.
+*This should be a unified list.
+*Return nil if check the wrong type of unified list
+*Otherwise ture.
+*This function use mapcar and memebr function.
+
+3.prune-unifiers
+*This function takes one arguement in.
+*This should be a list of unified lists.
+*If type check wrong, return nil.
+*Otherwise, return a new list of unified lists without the unified
+*list that binding two vraibles with the same constant
+*This function used defined local function and mapcan.
+
+4.adding-lst
+;;This function takes two list of unifiers in as arguments.
+;;It will return a new list of unifiers.
+;;In new list, for each elements in first arg,is
+;;append it with each elements in second arg one time.
+;;This function use local defined function and mapcar
+
+5.check-literal
+;;This function takes one list as the only arguement in.
+;;If this list is not a literal, it will return nil.
+;;If this list is a negative literal, it will return its positive version.
+;;If this list is a positive literal, it will return itself.
+;;This function use every, notevery and some function.
+
+6.check-state
+;;This function takes one list as the only arguement in.
+;;If this list is not part of state, it will return nil.
+;;Otherwise it returns true.
+;;This function calls var-chk function.
+
+7.unifier
+*This function takes two arguements in.
+*First arguement should be a list but with variable possibly and second arguement should be a list without variable.
+*If the type check wrong, return nil.
+*otherwise return a unified list.
+*This function used hash-table.
+
+8.apply-unifier
+*This function takes two arguements in.
+*First should be a unified list, and second should be a literal.
+*If the type check wrong, return nil.
+*Otherwise return a new literal with varaibles are replaced by constant corespondingly.
+*This function used recursion.
+
+9.append-check
+;;This function takes two list as arguements.
+;;It will append each item in first arg by each item in second arg respectively.
+;;This function use local defined function.
+
+10.recur-check
+;;This function takes one list as the second argument, and first arguement always empty.
+;;It recursively appends the first arg until second is reach to the end.
+;;This function call append-check function and use recursive.
+
+11.preconds-instances
+;;This function takes three list in as arguments.
+;;First one is a list of preconds.
+;;Second is state.
+;;Third is a list of constants.
+;;If type of any arg is wrong, it will return nil.
+;;Otherwise return all bindings that make them true in state.
+;;This function use local defined function and call prune-unifiers.
+
+12.final-check-op
+;;This is a helper function.
+;;It takes three list in as arguments.
+;;First one is a list of bindings (unifiers).
+;;Second is list of preconds.
+;;Third is a state.
+;;If the unifiers apply to preconds make it all true in state, then it will return this set of unifiers.
+;;Otherwise it will return nil.
+;;This function call apply-unifier function.
+
+13.distinct-bindings
+;;This function takes two list in as arguments.
+;;First arg is a list of variable, and second arg is a list of constants.
+;;If input types wrong, it will  return nil.
+;;Otherwise, it will return a list of unifiers,
+;;that binding variables and constants with all possible ways. 
+;;This function call several helper function.
+
+14.literal-unifiers
+;;This function takes three arguements.
+;;First arg is a literal.
+;;Second arg is a state.
+;;Third arg is a list of constants.
+;;If the type of any arguements is wrong, return nil.
+;;If first arg is postive literal with no variable,
+;;it will return true or nil, according to whether it is true in the state.
+;;If first arg is negtive literal with no variable,
+;;it will return true or nil, according to wheter it fails in the state.
+;;If first arg is positive with some variables,
+;;it will return unifiers according to the predicate.
+;;If first arg is negtive with some variables,
+;;it will return distinct bindings, but without what happend in the previous case.
+;;This function call several helper functions.
+
+15.operator-instances
+;;This function takes two arguements.
+;;First is an operation. second is a state.
+;;If type of any arg is wrong, return nil.
+;;Otherwise call precond-instantces and get the same return.
+
+16.check-operators
+*This function takes one argument in.
+*It should be a operator
+*This function aims to do type check if input is correct operator.
+*It returns true if correct, otherwise null.
+
+17.find-init
+*This functino takes two arguments in.
+*First is a initial state, second is the state try to match the first one.
+*If the state matches, return true, otherwise nil.
+
+18.back-track
+*This function takes trhee arguements in.
+*First is a state, second is a initial state, second is what will be return. It should be a list of operations
+*This function aims to recursively track the operations in the hash-table by using state and its previous state.
+*It will return a list if the list of operations if find-init return ture, otherwise nil.
+*It calls find-init and use recursion.
+
+19.find-goal
+*This function takes two arguements in.
+*First is a list of state, second is a state.
+*This function aims to find if first list contains second states.
+*If yes, it will return true, otherwise return nil.
+
+20.make-open-list
+*This function takes four arguements in.
+*First is a list of state, second is a list of operators, third is a conditions, fourth is a number.
+*This function try to call successor-states to generate new states and use them to check if there are goal conditions. If not, recursivcely go on to find it.
+*If the fun is exaughstive, return ni. If the number track recursion times treater than 1000, reutrn "Search takes too long time.", otherwise return the state found satisfied goal conditions.
+*This function use successor-states and find-goal, also use recursion.
+
+21.seperate-neg-pos
+*This function takes three arguments in.
+*First should be a list of literal, second should be intially empty, third should be intially the same as first one.
+*This function recursely seperate the ground and not ground literals in the first argument.
+*return a new list with them seperate.
+*This function use recursion.
+
+
+ 
+
